@@ -15,8 +15,8 @@ st.set_page_config(
 )
 
 # ---------------- Theme ----------------
-PINK = "#1a104b"
-NAVY = "#fbddd4"
+NAVY = "#1a104b"
+PINK= "#fbddd4"
 
 # ---------------- CSS ----------------
 def inject_css():
@@ -26,7 +26,7 @@ def inject_css():
 
 :root {{
   --bg:{navy};
-  --text:#1a104b;
+  --text:#fbddd4;
   --muted:rgba(255,255,255,.75);
   --pink:{pink};
   --panel:#221A63;
