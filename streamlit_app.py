@@ -15,8 +15,8 @@ st.set_page_config(
 )
 
 # ---------------- Theme ----------------
-PINK = "#FBDDD3"
-NAVY = "#19114B"
+PINK = "#1a104b"
+NAVY = "#fbddd4"
 
 # ---------------- CSS ----------------
 def inject_css():
