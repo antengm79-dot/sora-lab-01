@@ -25,7 +25,7 @@ def inject_css():
 @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;600;700;900&display=swap');
 
 :root {{
-  --bg:{navy};
+  --bg:{pink};
   --text:#fbddd4;
   --muted:rgba(255,255,255,.75);
   --pink:{pink};
