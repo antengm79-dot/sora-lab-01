@@ -26,7 +26,7 @@ def inject_css():
 
 :root {{
   --bg:{navy};
-  --text:#FFFFFF;
+  --text:#1a104b;
   --muted:rgba(255,255,255,.75);
   --pink:{pink};
   --panel:#221A63;
