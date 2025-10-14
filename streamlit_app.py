@@ -8,8 +8,6 @@ import streamlit as st
 
 # ---------------- Page config ----------------
 st.set_page_config(
-    import streamlit as st
-
 st.markdown("""
     <style>
     /* Google FontsからZen Maru Gothicを読み込む */
