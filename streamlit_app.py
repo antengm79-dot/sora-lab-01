@@ -8,6 +8,19 @@ import streamlit as st
 
 # ---------------- Page config ----------------
 st.set_page_config(
+    import streamlit as st
+
+st.markdown("""
+    <style>
+    /* Google FontsからZen Maru Gothicを読み込む */
+    @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap');
+
+    /* ページ全体のフォントをZen Maru Gothicに統一 */
+    html, body, [class*="css"]  {
+        font-family: 'Zen Maru Gothic', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     page_title="Sora — しんどい夜の2分ノート",
     page_icon="🌙",
     layout="centered",
