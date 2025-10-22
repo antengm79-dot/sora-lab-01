@@ -160,6 +160,13 @@ def header(title: str):
 
 # ================== HOME ==================
 def view_home():
+    print("home_view")
+    
+    st.markdown("## 🌙 Sora — しんどい夜の2分ノート")
+    st.write("テスト：この文字が見えますか？")
+    
+    if st.button("テストボタン"):
+        st.success("ボタンが動作しました！")
     st.markdown("## 🌙 Sora — しんどい夜の2分ノート")
     st.markdown('<div class="card">', unsafe_allow_html=True)
     st.write("**言葉の前に、息をひとつ。** 迷わず “呼吸で落ち着く → 感情を整える → 今日を書いておく → 勉強の進捗を見える化”。")
