@@ -22,21 +22,21 @@ CSV_SUBJECTS = DATA_DIR/"subjects.csv"
 CSV_STUDY_GOALS = DATA_DIR/"study_goals.csv"
 
 def now_ts() -> str:
-    return datetime.now().isoformat(timespec="seconds")
+  return datetime.now().isoformat(timespec="seconds")
 
 def load_csv(p: Path) -> pd.DataFrame:
-    if not p.exists(): return pd.DataFrame()
-    try: return pd.read_csv(p)
-    except Exception: return pd.DataFrame()
+  if not p.exists(): return pd.DataFrame()
+    try: return pd.read_csv(p)
+      except Exception: return pd.DataFrame()
 
 def save_csv(p: Path, df: pd.DataFrame) -> bool:
-    try: df.to_csv(p, index=False); return True
-    except Exception: return False
+  try: df.to_csv(p, index=False); return True
+    except Exception: return False
 
 def append_csv(p: Path, row: dict) -> bool:
-    df = load_csv(p)
-    df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
-    return save_csv(p, df)
+  df = load_csv(p)
+df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
+return save_csv(p, df)
 
 def week_range(d: Union[date, None] = None):
     d = d or date.today()
