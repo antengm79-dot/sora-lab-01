@@ -3,6 +3,7 @@
 
 from datetime import datetime, date, timedelta
 from pathlib import Path
+from typing import Union
 import time, uuid, json, io
 import pandas as pd
 import streamlit as st
@@ -37,7 +38,7 @@ def append_csv(p: Path, row: dict) -> bool:
     df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
     return save_csv(p, df)
 
-def week_range(d: date | None = None):
+def week_range(d: Union[date, None] = None):
     d = d or date.today()
     start = d - timedelta(days=d.weekday())   # 月曜
     end = start + timedelta(days=6)           # 日曜
