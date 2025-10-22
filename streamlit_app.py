@@ -7,12 +7,21 @@ from typing import Union
 import time, uuid, json, io
 import pandas as pd
 import streamlit as st
+import traceback # エラー表示用
 
 # ================== 基本設定（1回だけ） ==================
 st.set_page_config(page_title="Sora — しんどい夜の2分ノート", page_icon="🌙", layout="centered")
 
 # ================== データ保存まわり ==================
-DATA_DIR = Path("data"); DATA_DIR.mkdir(exist_ok=True)
+try:
+    DATA_DIR = Path("data")
+    DATA_DIR.mkdir(exist_ok=True)
+except Exception as e:
+    st.error(f"データディレクトリの作成に失敗しました: {e}")
+    st.error("デプロイ環境のファイル権限を確認してください。")
+    st.code("".join(traceback.format_exception(e)), language="python")
+    st.stop() # ディレクトリがなければ続行不可
+
 CSV_BREATH = DATA_DIR/"breath.csv"
 CSV_FEEL = DATA_DIR/"feel.csv"
 CSV_JOURNAL = DATA_DIR/"journal.csv"
@@ -145,7 +154,7 @@ def header(title: str):
     with cols[0]:
         if st.button("← ホームへ", use_container_width=True):
             ss.view = "HOME"
-            st.stop() # st.rerun()のエイリアスだが、ここでは即時停止が意図されている可能性が高い
+            st.rerun() # 修正： st.stop() -> st.rerun()
     with cols[1]:
         st.markdown(f"### {title}")
 
@@ -241,8 +250,11 @@ def view_breath():
             t=np.linspace(0,sec,int(sr*sec),False)
             w=0.15*np.sin(2*np.pi*f*t)*np.hanning(len(t))
             buf=io.BytesIO(); sf.write(buf,w,sr,format="WAV"); st.audio(buf.getvalue(), format="audio/wav")
+        except ImportError:
+            st.warning("効果音ライブラリ（numpy, soundfile）が見つかりません。requirements.txt を確認してください。")
+            pass # ライブラリがなくても続行
         except Exception:
-            pass
+            pass # その他のオーディオエラーは無視
 
     if start or ss.breath_active:
         ss.breath_active = True
@@ -366,7 +378,7 @@ def view_feel():
             append_csv(CSV_FEEL,row); ss["last_feel"]=row; st.success("保存しました。")
     with c2:
         if st.button("入力をクリア", use_container_width=True):
-            ss.em={}; ss.tg=set(); st.rerun() # 修正： st.experimental_rerun() -> st.rerun()
+            ss.em={}; ss.tg=set(); st.rerun()
 
     if ss.get("last_feel"):
         r = ss["last_feel"]
@@ -425,7 +437,7 @@ def save_goals_to_csv():
     rows = [{"key":"daily_goal","subject":"","value":ss.daily_goal}]
     for s in ss.subjects:
         rows.append({"key":"weekly","subject":s,"value":int(ss.weekly_subject_goals.get(s,0))})
-    pd.DataFrame(rows).to_csv(CSV_STUDY_GOALS, index=False) # 修正： 'S' 削除、インデント修正
+    pd.DataFrame(rows).to_csv(CSV_STUDY_GOALS, index=False)
 
 def view_study():
     header("📚 Study Tracker（科目×時間×メモ×進捗）")
@@ -517,7 +529,7 @@ def view_study():
         # 今週
         ws,we = week_range()
         w = df[(df["date"]>=ws) & (df["date"]<=we)].copy()
-        if w.empty: # 修正： 't' 削除
+        if w.empty:
             st.caption("今週の記録はまだありません。")
         else:
             agg = w.groupby("subject", as_index=False)["minutes"].sum().sort_values("minutes", ascending=False)
@@ -539,8 +551,11 @@ def view_study():
             plt.plot([d.strftime("%m/%d") for d in last14["date"]], last14["minutes"])
             plt.title("直近14日 合計分"); plt.ylabel("分"); plt.xticks(rotation=30, ha="right")
             st.pyplot(fig2)
-        except Exception:
+        except ImportError:
+            st.warning("グラフ描画ライブラリ（matplotlib）が見つかりません。requirements.txt を確認してください。")
             st.dataframe(last14.rename(columns={"date":"日付","minutes":"分"}), use_container_width=True, hide_index=True)
+        except Exception:
+             st.dataframe(last14.rename(columns={"date":"日付","minutes":"分"}), use_container_width=True, hide_index=True)
 
         if not w.empty:
             feel_counts = w.groupby("feel")["subject"].count().reset_index().rename(columns={"subject":"件数"})
@@ -599,7 +614,7 @@ def view_history():
     st.markdown("#### 自由ジャーナル")
     jd = load_csv(CSV_JOURNAL)
     if jd.empty: st.caption("まだ記録がありません。")
-    else: # 修正： 'M' 削除
+    else:
         try: jd["ts"]=pd.to_datetime(jd["ts"]); jd=jd.sort_values("ts", ascending=False)
         except Exception: pass
         for _,r in jd.head(20).iterrows():
@@ -648,5 +663,4 @@ try:
 except Exception as e:
     # ここは“白画面にしない”ための最終ガード。セーフUIは出さず、エラーだけ表示。
     st.error("画面描画中に問題が発生しました。")
-    import traceback as _tb
-    st.code("".join(_tb.format_exception(e)), language="python")
+    st.code("".join(traceback.format_exception(e)), language="python")
