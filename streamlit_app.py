@@ -13,13 +13,13 @@ st.set_page_config(page_title="Sora — しんどい夜の2分ノート", page_i
 
 # ================== データ保存まわり ==================
 DATA_DIR = Path("data"); DATA_DIR.mkdir(exist_ok=True)
-CSV_BREATH       = DATA_DIR/"breath.csv"
-CSV_FEEL         = DATA_DIR/"feel.csv"
-CSV_JOURNAL      = DATA_DIR/"journal.csv"
-CSV_DAY          = DATA_DIR/"day.csv"
-CSV_STUDY        = DATA_DIR/"study.csv"
-CSV_SUBJECTS     = DATA_DIR/"subjects.csv"
-CSV_STUDY_GOALS  = DATA_DIR/"study_goals.csv"
+CSV_BREATH = DATA_DIR/"breath.csv"
+CSV_FEEL = DATA_DIR/"feel.csv"
+CSV_JOURNAL = DATA_DIR/"journal.csv"
+CSV_DAY = DATA_DIR/"day.csv"
+CSV_STUDY = DATA_DIR/"study.csv"
+CSV_SUBJECTS = DATA_DIR/"subjects.csv"
+CSV_STUDY_GOALS = DATA_DIR/"study_goals.csv"
 
 def now_ts() -> str:
     return datetime.now().isoformat(timespec="seconds")
